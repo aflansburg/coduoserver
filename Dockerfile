@@ -12,7 +12,7 @@ RUN dpkg --add-architecture i386 && \
     DEBIAN_FRONTEND=noninteractive apt install -y curl wget file tar bzip2 gzip unzip \
       bsdmainutils python3 util-linux ca-certificates \
       binutils bc jq tmux netcat lib32gcc1 lib32stdc++6 libstdc++5:i386 \
-      cpio distro-info cron
+      cpio distro-info cron expect
 
 # Purge any existing node install
 RUN apt remove --purge -y nodejs npm && \
@@ -59,5 +59,8 @@ RUN /coduo-server/update_crontab.sh
 # Expose any required ports (optional)
 EXPOSE 28960
 
-# Set the default command for the container
-CMD ["sh", "-c", "./coduoserver start && yes yes | ./coduoserver console"]
+COPY entrypoint.sh /entrypoint.sh
+COPY console_expect.exp /console_expect.exp
+
+CMD ["/entrypoint.sh"]
+

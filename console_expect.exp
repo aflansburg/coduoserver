@@ -1,0 +1,10 @@
+#!/usr/bin/expect
+
+spawn yes yes | ./coduoserver console
+
+# no timeout
+set timeout -1
+
+expect {
+    eof { exit }
+}
