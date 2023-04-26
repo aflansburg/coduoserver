@@ -1,6 +1,5 @@
 #!/bin/bash
 
-su - coduoserver -c "
 # Backup existing crontab
 crontab -l > backup_crontab.txt
 
@@ -12,4 +11,3 @@ EOL
 
 # Install new crontab
 crontab new_crontab.txt
-"
