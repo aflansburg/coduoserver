@@ -11,7 +11,8 @@ RUN dpkg --add-architecture i386 && \
     apt update && \
     DEBIAN_FRONTEND=noninteractive apt install -y curl wget file tar bzip2 gzip unzip \
       bsdmainutils python3 util-linux ca-certificates \
-      binutils bc jq tmux netcat lib32gcc1 lib32stdc++6 libstdc++5:i386
+      binutils bc jq tmux netcat lib32gcc1 lib32stdc++6 libstdc++5:i386 \
+      cpio distro-info cron
 
 # Purge any existing node install
 RUN apt remove --purge -y nodejs npm && \
@@ -42,21 +43,21 @@ RUN wget -O linuxgsm.sh https://linuxgsm.sh && chmod +x linuxgsm.sh && bash linu
 
 # Install the server
 RUN yes yes | ./coduoserver install
-RUN ./coduoserver start
-RUN ./coduoserver stop
+# RUN ./coduoserver start
+# RUN ./coduoserver stop
 
 # Update server name
-RUN su - coduoserver -c "sed -i '1c\\set sv_hostname \"hells_raiders\"' /home/coduoserver/serverfiles/uo/coduoserver.cfg"
+RUN pwd
+RUN ls
+RUN sed -i '1c\\set sv_hostname \"hells_raiders\"' serverfiles/uo/coduoserver.cfg
 
 COPY update_crontab.sh /coduo-server/
 
 # Run the setup script
-RUN chmod +x /coduo-server/update_crontab.sh && /coduo-server/update_crontab.sh
-
-RUN ./coduoserver details
+RUN /coduo-server/update_crontab.sh
 
 # Expose any required ports (optional)
 EXPOSE 28960
 
 # Set the default command for the container
-CMD ["./coduoserver", "start"]
+CMD ["sh", "-c", "./coduoserver start && yes yes | ./coduoserver console"]

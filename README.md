@@ -1,7 +1,7 @@
 ## Build container
 ```
 # for pushing to ghcr
-docker buildx build --platform=linux/x86_64 --push -t ghcr.io/aflansburg/coduoserver .
+docker buildx build --platform=linux/x86_64 --push -t <your registry of choice>/coduoserver .
 # for local (use --load)
 docker buildx build --platform=linux/x86_64 --load -t coduoserver .
 ```
