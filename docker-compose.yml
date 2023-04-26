@@ -1,0 +1,13 @@
+version: "3.8"
+services:
+  linuxgsm:
+    image: "ghcr.io/aflansburg/coduoserver:latest"
+    container_name: coduoserver
+    ports:
+      - "27015:27015/tcp"
+      - "27015:27015/udp"
+      - "27020:27020/udp"
+      - "27005:27005/udp"
+      - "28960:28960/tcp"
+      - "28960:28960/udp"
+    restart: unless-stopped

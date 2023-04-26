@@ -51,16 +51,13 @@ RUN pwd
 RUN ls
 RUN sed -i '1c\\set sv_hostname \"hells_raiders\"' serverfiles/uo/coduoserver.cfg
 
-COPY update_crontab.sh /coduo-server/
-
-# Run the setup script
-RUN /coduo-server/update_crontab.sh
+RUN (crontab -l 2>/dev/null; echo "*/5 * * * * /home/*server monitor > /dev/null 2>&1") | crontab -
+RUN (crontab -l 2>/dev/null; echo "*/30 * * * * /home/*server update > /dev/null 2>&1") | crontab -
+RUN (crontab -l 2>/dev/null; echo "0 1 * * 0 /home/*server update-lgsm > /dev/null 2>&1") | crontab -
 
 # Expose any required ports (optional)
-EXPOSE 28960
+# EXPOSE 28960
 
 COPY entrypoint.sh /entrypoint.sh
-COPY console_expect.exp /console_expect.exp
 
 CMD ["/entrypoint.sh"]
-
